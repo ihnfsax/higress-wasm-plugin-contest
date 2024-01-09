@@ -1,0 +1,82 @@
+version: v1.0.0
+kind: CRS Application Attack PHP
+rules:
+  - id: 933100
+    payload: |
+      (?:<\?(?:[^x]|x[^m]|xm[^l]|xml[^\s]|xml$|$)|<\?php|\[(?:\/|\x5c)?php\])
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 933130
+    payload: "php-variables.data"
+    matchType: text-in-file
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 933140
+    payload: |
+      (?i)php:\/\/(?:std(?:in|out|err)|(?:in|out)put|fd|memory|temp|filter)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 933160
+    payload: |
+      (?i)\b\(?[\"']*(?:assert(?:_options)?|c(?:hr|reate_function)|e(?:val|x(?:ec|p))|file(?:group)?|glob|i(?:mage(?:gif|(?:jpe|pn)g|wbmp|xbm)|s_a)|md5|o(?:pendir|rd)|p(?:assthru|open|rev)|(?:read|tmp)file|un(?:pac|lin)k|s(?:tat|ubstr|ystem))(?:\/(?:\*.*\*\/|\/.*)|#.*[\s\v]|\")*[\"']*\)?[\s\v]*\(.*\)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 933180
+    payload: |
+      \$+(?:[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*|\s*{.+})(?:\s|\[.+\]|{.+}|\/\*.*\*\/|\/\/.*|#.*)*\(.*\)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLFilename
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 933210
+    payload: |
+      (?:\((?:.+\)(?:[\"'][\-0-9A-Z_a-z]+[\"'])?\(.+|[^\)]*string[^\)]*\)[\s\v\"'\--\.0-9A-\[\]_a-\{\}]+\([^\)]*)|(?:\[[0-9]+\]|\{[0-9]+\}|\$[^\(-\),\.-/;\x5c]+|[\"'][\-0-9A-Z\x5c_a-z]+[\"'])\(.+)\);
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLFilename
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL

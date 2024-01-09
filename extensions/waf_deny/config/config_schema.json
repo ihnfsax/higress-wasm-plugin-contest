@@ -1,0 +1,115 @@
+{
+    "definitions": {
+        "filter": {
+            "type": "object",
+            "properties": {
+                "id_max": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "id_min": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "id": {
+                    "type": [
+                        "integer",
+                        "array"
+                    ],
+                    "minimum": 0,
+                    "items": {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                },
+                "matchType": {
+                    "type": [
+                        "string",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "action": {
+                    "type": [
+                        "string",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "placeholders": {
+                    "type": [
+                        "string",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "transformations": {
+                    "type": [
+                        "string",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "tags": {
+                    "type": [
+                        "string",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "filename": {
+                    "type": [
+                        "string",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "type": "object",
+    "properties": {
+        "rule_server": {
+            "type": "string",
+            "description": "user name"
+        },
+        "enabled_rules": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/filter"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/filter"
+                    }
+                }
+            ]
+        },
+        "disabled_rules": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/filter"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/filter"
+                    }
+                }
+            ]
+        }
+    }
+}

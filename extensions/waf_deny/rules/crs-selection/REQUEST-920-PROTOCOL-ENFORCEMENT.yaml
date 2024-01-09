@@ -1,0 +1,25 @@
+version: v1.0.0
+kind: CRS Protocal Enforcement
+rules:
+  - id: 920350
+    payload: |
+      (?:^([\d.]+|\[[\da-f:]+\]|[\da-f:]+)(:[\d]+)?$)
+    matchType: regex
+    action: deny
+    placeholders:
+      - HeaderValue:Host
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 920440
+    payload: |
+      \.([^.]+)$
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLBasename
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL

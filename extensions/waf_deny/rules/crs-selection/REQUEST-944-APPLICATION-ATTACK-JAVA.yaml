@@ -1,0 +1,48 @@
+version: v1.0.0
+kind: CRS Application Attack Java
+rules:
+  - id: 944100
+    payload: |
+      java\.lang\.(?:runtime|processbuilder)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+      - HeaderName
+      - HeaderValue
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 944130
+    payload: "java-classes.data"
+    matchType: text-in-file
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+      - HeaderName
+      - HeaderValue
+      - URLFilename
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 944150
+    payload: |
+      (?i)(?:\$|&dollar;?)(?:\{|&l(?:brace|cub);?)(?:[^\}]{0,15}(?:\$|&dollar;?)(?:\{|&l(?:brace|cub);?)|jndi|ctx)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+      - HeaderName
+      - HeaderValue
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL

@@ -1,0 +1,17 @@
+{
+    "rule_server": "rule_server",
+    "enabled_rules": {
+        "filename": "**/*.yaml"
+    },
+    "disabled_rules": [
+        {
+            "filename": "crs-selection/REQUEST-932-APPLICATION-ATTACK-RCE.yaml"
+        },
+        {
+            "tags": [
+                "test",
+                "not valid"
+            ]
+        }
+    ]
+}

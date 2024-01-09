@@ -1,0 +1,4 @@
+If:
+  PathExclude: common/json_util.h
+CompileFlags:
+  Add: [-std=c++17]

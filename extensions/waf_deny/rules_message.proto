@@ -1,0 +1,30 @@
+syntax = "proto3";
+package waf_deny;
+
+message Rule {
+    uint64 id = 1;
+    string payload = 2;
+    string match_type = 3;
+    string action = 4;
+    repeated string placeholders = 5;
+    repeated string transformations = 6;
+    repeated string tags = 7;
+    string filename = 8;
+}
+
+message Metadata {
+    string filename = 1;
+    optional string version = 3;
+    optional string kind = 4;
+}
+
+message RuleData {
+    string filename = 1;
+    string data = 2;
+}
+
+message RulesMessage {
+    repeated Metadata metadata = 1;
+    repeated Rule static_rules = 2;
+    repeated RuleData rule_data = 3;
+}

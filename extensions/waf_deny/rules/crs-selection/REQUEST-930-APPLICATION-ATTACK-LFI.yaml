@@ -1,0 +1,57 @@
+version: v1.0.0
+kind: CRS Application Attack LFI
+rules:
+  - id: 930100
+    payload: |
+      (?i)(?:[/\x5c]|%(?:2(?:f|5(?:2f|5c|c(?:1%259c|0%25af))|%46)|5c|c(?:0%(?:[2aq]f|5c|9v)|1%(?:[19p]c|8s|af))|(?:bg%q|(?:e|f(?:8%8)?0%8)0%80%a)f|u(?:221[5-6]|EFC8|F025|002f)|%3(?:2(?:%(?:%6|4)6|F)|5%%63)|1u)|0x(?:2f|5c))(?:\.(?:%0[0-1]|\?)?|\?\.?|%(?:2(?:(?:5(?:2|c0%25a))?e|%45)|c0(?:\.|%[25-6ae-f]e)|u(?:(?:ff0|002)e|2024)|%32(?:%(?:%6|4)5|E)|(?:e|f(?:(?:8|c%80)%8)?0%8)0%80%ae)|0x2e){2,3}(?:[/\x5c]|%(?:2(?:f|5(?:2f|5c|c(?:1%259c|0%25af))|%46)|5c|c(?:0%(?:[2aq]f|5c|9v)|1%(?:[19p]c|8s|af))|(?:bg%q|(?:e|f(?:8%8)?0%8)0%80%a)f|u(?:221[5-6]|EFC8|F025|002f)|%3(?:2(?:%(?:%6|4)6|F)|5%%63)|1u)|0x(?:2f|5c))
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLPath
+      - URLParamName
+      - URLParamValue
+      - HeaderName
+      - HeaderValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 930110
+    payload: 
+      (?:(?:^|[\x5c/;])\.{2,3}[\x5c/;]|[\x5c/;]\.{2,3}(?:[\x5c/;]|$))
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLPath
+      - HeaderName
+      - HeaderValue
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 930120
+    payload: "lfi-os-files.data"
+    matchType: text-in-file
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 930130
+    payload: "restricted-files.data"
+    matchType: text-in-file
+    action: deny
+    placeholders:
+      - URLFilename
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL

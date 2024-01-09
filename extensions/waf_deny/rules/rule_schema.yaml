@@ -1,0 +1,57 @@
+versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          kind:
+            type: string
+          rules:
+            type: array
+            items:
+              type: object
+              properties:
+                action:
+                  type: string
+                id:
+                  type: integer
+                  minimum: 0
+                matchType:
+                  type: string
+                payload:
+                  type: string
+                placeholders:
+                  type:
+                  - string
+                  - array
+                  items:
+                    type: string
+                  uniqueItems: true
+                tags:
+                  type:
+                  - string
+                  - array
+                  items:
+                    type: string
+                  uniqueItems: true
+                transformations:
+                  type:
+                  - string
+                  - array
+                  items:
+                    type: string
+                  uniqueItems: true
+              required:
+              - id
+              - payload
+              - matchType
+              - action
+              - placeholders
+              - transformations
+          version:
+            type:
+            - string
+            - integer
+        required:
+        - version
+        - rules

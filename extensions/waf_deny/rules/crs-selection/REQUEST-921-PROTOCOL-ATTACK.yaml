@@ -1,0 +1,27 @@
+version: v1.0.0
+kind: CRS Protocal Attack
+rules:
+  - id: 921190
+    payload: |
+      [\n\r]
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLFilename
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 921200
+    payload: |
+      ^[^:\(\)\&\|\!\<\>\~]*\)\s*(?:\((?:[^,\(\)\=\&\|\!\<\>\~]+[><~]?=|\s*[&!|]\s*(?:\)|\()?\s*)|\)\s*\(\s*[\&\|\!]\s*|[&!|]\s*\([^\(\)\=\&\|\!\<\>\~]+[><~]?=[^:\(\)\&\|\!\<\>\~]*)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL

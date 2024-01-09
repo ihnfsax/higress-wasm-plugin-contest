@@ -1,0 +1,187 @@
+version: v1.0.0
+kind: CRS Application Attack SQLi
+rules:
+  - id: 942140
+    payload: |
+      (?i)\b(?:d(?:atabas|b_nam)e[^0-9A-Z_a-z]*\(|(?:information_schema|m(?:aster\.\.sysdatabases|s(?:db|ys(?:ac(?:cess(?:objects|storage|xml)|es)|modules2?|(?:object|querie|relationship)s))|ysql\.db)|northwind|pg_(?:catalog|toast)|tempdb)\b|s(?:chema(?:_name\b|[^0-9A-Z_a-z]*\()|(?:qlite_(?:temp_)?master|ys(?:aux|\.database_name))\b))
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942151
+    payload: |
+      (?i)\b(?:a(?:dd(?:dat|tim)e|es_(?:de|en)crypt|s(?:cii(?:str)?|in)|tan2?)|b(?:enchmark|i(?:n_to_num|t_(?:and|count|length|x?or)))|c(?:har(?:acter)?_length|iel(?:ing)?|o(?:alesce|ercibility|llation|(?:mpres)?s|n(?:cat(?:_ws)?|nection_id|v(?:ert(?:_tz)?)?)|t)|r32|ur(?:(?:dat|tim)e|rent_(?:date|time(?:stamp)?|user)))|d(?:a(?:t(?:abase|e(?:_(?:add|format|sub)|diff))|y(?:name|of(?:month|week|year)))|count|e(?:code|grees|s_(?:de|en)crypt)|ump)|e(?:lt|n(?:c(?:ode|rypt)|ds_?with)|x(?:p(?:ort_set)?|tract(?:value)?))|f(?:i(?:el|n)d_in_set|ound_rows|rom_(?:base64|days|unixtime))|g(?:e(?:ometrycollection|t_(?:format|lock))|(?:r(?:eates|oup_conca)|tid_subse)t)|hex(?:toraw)?|i(?:fnull|n(?:et6?_(?:aton|ntoa)|s(?:ert|tr)|terval)|s(?:_(?:(?:free|used)_lock|ipv(?:4(?:_(?:compat|mapped))?|6)|n(?:ot(?:_null)?|ull))|null))|json(?:_(?:a(?:gg|rray(?:_(?:elements(?:_text)?|length))?)|build_(?:array|object)|e(?:ac|xtract_pat)h(?:_text)?|object(?:_(?:agg|keys))?|populate_record(?:set)?|strip_nulls|t(?:o_record(?:set)?|ypeof))|b(?:_(?:array(?:_(?:elements(?:_text)?|length))?|build_(?:array|object)|object(?:_(?:agg|keys))?|e(?:ac|xtract_pat)h(?:_text)?|insert|p(?:ath_(?:(?:exists|match)(?:_tz)?|query(?:_(?:(?:array|first)(?:_tz)?|tz))?)|opulate_record(?:set)?|retty)|s(?:et(?:_lax)?|trip_nulls)|t(?:o_record(?:set)?|ypeof)))?|path)?|l(?:ast_(?:day|inser_id)|case|e(?:as|f)t|i(?:kel(?:ihood|y)|nestring)|o(?:ad_file|ca(?:ltimestamp|te)|g(?:10|2)|wer)|pad|trim)|m(?:a(?:ke(?:_set|date)|ster_pos_wait)|d5|i(?:crosecon)?d|onthname|ulti(?:linestring|po(?:int|lygon)))|n(?:ame_const|ot_in|ullif)|o(?:ct(?:et_length)?|(?:ld_passwo)?rd)|p(?:eriod_(?:add|diff)|g_(?:client_encoding|sleep)|o(?:(?:lyg|siti)on|w)|rocedure_analyse)|qu(?:arter|ote)|r(?:a(?:dians|nd|wtohex)|elease_lock|ow_(?:count|to_json)|pad|trim)|s(?:chema|e(?:c_to_time|ssion_user)|ha[1-2]?|in|oundex|pace|q(?:lite_(?:compileoption_(?:get|used)|source_id)|rt)|t(?:arts_?with|d(?:dev_(?:po|sam)p)?|r(?:_to_date|cmp))|ub(?:(?:dat|tim)e|str(?:ing(?:_index)?)?)|ys(?:date|tem_user))|t(?:ime(?:_(?:format|to_sec)|diff|stamp(?:add|diff)?)|o(?:_(?:base64|jsonb?)|n?char|(?:day|second)s)|r(?:im|uncate))|u(?:case|n(?:compress(?:ed_length)?|hex|i(?:str|x_timestamp)|likely)|(?:pdatexm|se_json_nul)l|tc_(?:date|time(?:stamp)?)|uid(?:_short)?)|var(?:_(?:po|sam)p|iance)|we(?:ek(?:day|ofyear)|ight_string)|xmltype|yearweek)[^0-9A-Z_a-z]*\(
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942160
+    payload: |
+      (\?i:sleep\(\s*?\d*?\s*?\)|benchmark\(.*?\,.*?\))
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLBasename
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942190
+    payload: |
+      (?i)[\"'`](?:[\s\v]*![\s\v]*[\"'0-9A-Z_-z]|;?[\s\v]*(?:having|select|union\b[\s\v]*(?:all|(?:distin|sele)ct))\b[\s\v]*[^\s\v])|\b(?:(?:(?:c(?:onnection_id|urrent_user)|database|schema|user)[\s\v]*?|select.*?[0-9A-Z_a-z]?user)\(|exec(?:ute)?[\s\v]+master\.|from[^0-9A-Z_a-z]+information_schema[^0-9A-Z_a-z]|into[\s\v\+]+(?:dump|out)file[\s\v]*?[\"'`]|union(?:[\s\v]select[\s\v]@|[\s\v\(0-9A-Z_a-z]*?select))|[\s\v]*?exec(?:ute)?.*?[^0-9A-Z_a-z]xp_cmdshell|[^0-9A-Z_a-z]iif[\s\v]*?\(
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942240
+    payload: |
+      (?i)alter[\s\v]*?[0-9A-Z_a-z]+.*?char(?:acter)?[\s\v]+set[\s\v]+[0-9A-Z_a-z]+|[\"'`](?:;*?[\s\v]*?waitfor[\s\v]+(?:time|delay)[\s\v]+[\"'`]|;.*?:[\s\v]*?goto)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942270
+    payload: |
+      (?i)union.*?select.*?from
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942280
+    payload: |
+      (?i)select[\s\v]*?pg_sleep|waitfor[\s\v]*?delay[\s\v]?[\"'`]+[\s\v]?[0-9]|;[\s\v]*?shutdown[\s\v]*?(?:[#;\{]|\/\*|--)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942290
+    payload: |
+      (?i)\[?\$(?:n(?:e|in?|o[rt])|e(?:q|xists|lemMatch)|l(?:te?|ike)|mod|a(?:ll|nd)|(?:s(?:iz|lic)|wher)e|t(?:ype|ext)|x?or|div|between|regex|jsonSchema)\]?
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942320
+    payload: |
+      (?i)create[\s\v]+(?:function|procedure)[\s\v]*?[0-9A-Z_a-z]+[\s\v]*?\([\s\v]*?\)[\s\v]*?-|d(?:eclare[^0-9A-Z_a-z]+[#@][\s\v]*?[0-9A-Z_a-z]+|iv[\s\v]*?\([\+\-]*[\s\v\.0-9]+,[\+\-]*[\s\v\.0-9]+\))|exec[\s\v]*?\([\s\v]*?@|(?:lo_(?:impor|ge)t|procedure[\s\v]+analyse)[\s\v]*?\(|;[\s\v]*?(?:declare|open)[\s\v]+[\-0-9A-Z_a-z]+|::(?:b(?:igint|ool)|double[\s\v]+precision|int(?:eger)?|numeric|oid|real|(?:tex|smallin)t)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942350
+    payload: |
+      (?i)create[\s\v]+function[\s\v].+[\s\v]returns|;[\s\v]*?(?:alter|(?:(?:cre|trunc|upd)at|renam)e|d(?:e(?:lete|sc)|rop)|(?:inser|selec)t|load)\b[\s\v]*?[\(\[]?[0-9A-Z_a-z]{2,}
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942360
+    payload: |
+      (?i)\b(?:(?:alter|(?:(?:cre|trunc|upd)at|renam)e|de(?:lete|sc)|(?:inser|selec)t|load)[\s\v]+(?:char|group_concat|load_file)\b[\s\v]*\(?|end[\s\v]*?\);)|[\s\v\(]load_file[\s\v]*?\(|[\"'`][\s\v]+regexp[^0-9A-Z_a-z]|[\"'0-9A-Z_-z][\s\v]+as\b[\s\v]*[\"'0-9A-Z_-z]+[\s\v]*\bfrom|^[^A-Z_a-z]+[\s\v]*?(?:(?:(?:(?:cre|trunc)at|renam)e|d(?:e(?:lete|sc)|rop)|(?:inser|selec)t|load)[\s\v]+[0-9A-Z_a-z]+|u(?:pdate[\s\v]+[0-9A-Z_a-z]+|nion[\s\v]*(?:all|(?:sele|distin)ct)\b)|alter[\s\v]*(?:a(?:(?:ggregat|pplication[\s\v]*rol)e|s(?:sembl|ymmetric[\s\v]*ke)y|u(?:dit|thorization)|vailability[\s\v]*group)|b(?:roker[\s\v]*priority|ufferpool)|c(?:ertificate|luster|o(?:l(?:latio|um)|nversio)n|r(?:edential|yptographic[\s\v]*provider))|d(?:atabase|efault|i(?:mension|skgroup)|omain)|e(?:(?:ndpoi|ve)nt|xte(?:nsion|rnal))|f(?:lashback|oreign|u(?:lltext|nction))|hi(?:erarchy|stogram)|group|in(?:dex(?:type)?|memory|stance)|java|l(?:a(?:ngua|r)ge|ibrary|o(?:ckdown|g(?:file[\s\v]*group|in)))|m(?:a(?:s(?:k|ter[\s\v]*key)|terialized)|e(?:ssage[\s\v]*type|thod)|odule)|(?:nicknam|queu)e|o(?:perator|utline)|p(?:a(?:ckage|rtition)|ermission|ro(?:cedur|fil)e)|r(?:e(?:mot|sourc)e|o(?:l(?:e|lback)|ute))|s(?:chema|e(?:arch|curity|rv(?:er|ice)|quence|ssion)|y(?:mmetric[\s\v]*key|nonym)|togroup)|t(?:able(?:space)?|ext|hreshold|r(?:igger|usted)|ype)|us(?:age|er)|view|w(?:ork(?:load)?|rapper)|x(?:ml[\s\v]*schema|srobject))\b)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942500
+    payload: |
+      (\?i:\/\*[!+](?:[\w\s=_\-()]+)?\*\/)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942540
+    payload: |
+      ^(?:[^']*'|[^\"]*\"|[^`]*`)[\s\v]*;
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
+  - id: 942550
+    payload: |
+      [\"'`][\[\{].*[\]\}][\"'`].*(::.*jsonb?)?.*(?:(?:@|->?)>|<@|\?[&\|]?|#>>?|[<>]|<-)|(?:(?:@|->?)>|<@|\?[&\|]?|#>>?|[<>]|<-)[\"'`][\[\{].*[\]\}][\"'`]|json_extract.*\(.*\)
+    matchType: regex
+    action: deny
+    placeholders:
+      - URLParamName
+      - URLParamValue
+      - RawBody
+      - URLFilename
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL

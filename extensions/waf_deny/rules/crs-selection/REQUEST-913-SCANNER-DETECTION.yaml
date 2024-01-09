@@ -1,0 +1,13 @@
+version: v1.0.0
+kind: CRS Scanner Detection
+rules:
+  - id: 913100
+    payload: "scanners-user-agents.data"
+    matchType: text-in-file
+    action: deny
+    placeholders:
+      - HeaderValue:User-Agent # REQUEST_HEADERS:User-Agent
+    transformations:
+      - Base64
+      - URL
+      - Base64|URL
